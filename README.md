@@ -1,70 +1,132 @@
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# 🧑‍💻 FastAPI Microservices UI – React Frontend
 
-## Available Scripts
+This is a fully decoupled React-based UI that interacts with Python FastAPI microservices for user management, product catalog, and order placement.
 
-In the project directory, you can run:
+The interface is responsive, dynamic, and automatically refreshes dropdowns when new users or products are created.
 
-### `npm start`
+---
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## ⚙️ Tech Stack
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- React (with Create React App)
+- Axios (for HTTP communication)
+- FastAPI (backend microservices)
+- Docker (backend orchestration)
 
-### `npm test`
+---
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## 📁 Project Structure
 
-### `npm run build`
+```
+frontend/
+├── public/
+├── src/
+│   ├── components/
+│   │   ├── UserForm.js
+│   │   ├── ProductForm.js
+│   │   └── OrderForm.js
+│   ├── api.js
+│   ├── App.js
+│   └── index.js
+├── package.json
+└── .gitignore
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+---
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## 🚀 Features
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- ✅ Create and list users
+- ✅ Create and list products
+- ✅ Place orders using real-time dropdowns (auto-refreshes)
+- ✅ React state sync across components via props
+- ✅ CORS handled in FastAPI backend
 
-### `npm run eject`
+---
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## 🔌 API Configuration
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### `src/api.js`
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+```js
+import axios from "axios";
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+export const userApi = axios.create({
+  baseURL: "http://localhost:8001",
+  headers: { "Content-Type": "application/json" }
+});
 
-## Learn More
+export const productApi = axios.create({
+  baseURL: "http://localhost:8002",
+  headers: { "Content-Type": "application/json" }
+});
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+export const orderApi = axios.create({
+  baseURL: "http://localhost:8003",
+  headers: { "Content-Type": "application/json" }
+});
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+---
 
-### Code Splitting
+## 🧠 Auto-Refresh on Form Submit
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+- `App.js` holds a `refreshKey` state
+- Passed as props to `OrderForm`
+- Triggered by `onUserCreated` and `onProductCreated` in child forms
+- `OrderForm` re-fetches dropdown options automatically
 
-### Analyzing the Bundle Size
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## ▶️ Run the App
 
-### Making a Progressive Web App
+### 1. Install dependencies
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+```bash
+npm install
+```
 
-### Advanced Configuration
+### 2. Start React app
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+```bash
+npm start
+```
 
-### Deployment
+### 3. Make sure backend is running
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+```bash
+docker-compose up --build
+```
 
-### `npm run build` fails to minify
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## 🔒 CORS Support
+
+Ensure each FastAPI microservice includes:
+
+```python
+from fastapi.middleware.cors import CORSMiddleware
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"]
+)
+```
+
+---
+
+## ✅ Status
+
+- 🔄 Auto-refreshing user and product dropdowns
+- 🛠 Component props for shared state
+- 📦 Ready for GitHub portfolio or live deployment
+
+---
+
+## 📄 License
+
+MIT — free to use, modify, and build upon.
